@@ -39,7 +39,10 @@ class MongoDBManager(BaseManager):
             self._connect()
             database = self.db.job_manager_pygeoapi
             collection = database.jobs
-            jobs = list(collection.find({}))
+            if status != None:
+                jobs = list(collection.find({},{"status": status}))
+            else:
+                jobs = list(collection.find({}))
             print("JOBMANAGER - MongoDB jobs queried")
             self.destroy()
             return jobs
@@ -86,6 +89,7 @@ class MongoDBManager(BaseManager):
             return False
 
     def delete_job(self, job_id):
+        #should not delete the job but update the status and on second request should delete it?
         try:
             self._connect()
             database = self.db.job_manager_pygeoapi
