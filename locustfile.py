@@ -1,24 +1,45 @@
 from locust import HttpUser, task
 import random
-
-ids = ['74dc0f05-8dbf-11ed-8434-54e1ad4efa81',
-       'c00786e2-98be-11ed-8f20-54e1ad4efa81',
-       '23cf474b-98c3-11ed-9f17-54e1ad4efa81',
-       '36ca8d2c-98c3-11ed-b1fc-54e1ad4efa81',
-       'd1298c54-98c3-11ed-a6ef-54e1ad4efa81',
-       'e7b255a9-98c3-11ed-b1cc-54e1ad4efa81']
-
-status = ["accepted", "running", "successful", "failed", "dismissed"]
-
-class HelloWorldUser(HttpUser):
+from urllib.request import urlopen
+import json
+class pygeoapiPerformanceTest(HttpUser):
     @task
     def jobs(self):
+
+        status = ["accepted", "running", "successful", "failed", "dismissed"]
+
+        response = urlopen('http://localhost:5000/jobs?f=json')
+        string = response.read().decode('utf-8')
+        json_obj = json.loads(string)
+        jobIDs = []
+        completedJobs = []
+        for i in json_obj["jobs"]:
+            jobIDs.append(i["jobID"])
+            if i['status'] == 'successful':
+                completedJobs.append(i["jobID"])
+
+        #add collections and items
+        #start processes from here
+
+        #get main page 
+        self.client.get("http://localhost:5000/")
+        #get conformance
+        self.client.get("http://localhost:5000/conformance?f=html")
+        #get api def
+        self.client.get("http://localhost:5000/openapi?f=json")
+        #get collections
+        self.client.get("http://localhost:5000/collections/portolan")
+        #get collection
+        self.client.get("http://localhost:5000/collections?f=html")
+        #get items
+        self.client.get("http://localhost:5000/collections/portolan/items")
         #get jobs
         self.client.get("http://localhost:5000/jobs?f=json")
         #get jobs with status
         self.client.get("http://localhost:5000/jobs?status=" + random.choice(status) + "&f=json")
         #get job
-        self.client.get("http://localhost:5000/jobs/" + random.choice(ids) + "?f=json")
+        self.client.get("http://localhost:5000/jobs/" + random.choice(jobIDs) + "?f=json")
         #get results 
-        self.client.get("http://localhost:5000/jobs/" + random.choice(ids) + "/results?f=json")
-        
+        #Fehler kommen durch einen Fehler in der pygeoAPI zustande. Hier wird 400 anstatt 200 zurückgegeben wenn ein Job Fehlegschlagen ist
+        self.client.get("http://localhost:5000/jobs/" + random.choice(completedJobs) + "/results?f=json")   
+
