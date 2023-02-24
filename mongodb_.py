@@ -11,7 +11,7 @@ class MongoDBManager(BaseManager):
         self.is_async = True
 
     def _connect(self):
-        #connection in CFG would be something like mongodb://localhost:27017/
+        #connection in config.yaml - something like mongodb://localhost:27017/
         try:
             client = MongoClient(self.connection)
             self.db = client
@@ -76,8 +76,6 @@ class MongoDBManager(BaseManager):
             database = self.db.job_manager_pygeoapi
             collection = database.jobs
             entry = collection.find_one( {"identifier" : job_id})
-            print(entry)
-            print(update_dict)
             collection.update_one(entry, {"$set": update_dict})
             print("JOBMANAGER - MongoDB job updated")
             self.destroy()
@@ -89,7 +87,6 @@ class MongoDBManager(BaseManager):
             return False
 
     def delete_job(self, job_id):
-        #should not delete the job but update the status and on second request should delete it?
         try:
             self._connect()
             database = self.db.job_manager_pygeoapi
