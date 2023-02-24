@@ -47,14 +47,14 @@ class MongoDBManager(BaseManager):
             database = self.db.job_manager_pygeoapi
             collection = database.jobs
             if status != None:
-                jobs = list(collection.find({},{"status": status}))
+                jobs = list(collection.find({}, {"status": status}))
             else:
                 jobs = list(collection.find({}))
             LOGGER.info("JOBMANAGER - MongoDB jobs queried")
-            self.destroy()
+            #self.destroy()
             return jobs
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - get_jobs error",
                  exc_info=(traceback))
             return False
@@ -64,15 +64,12 @@ class MongoDBManager(BaseManager):
             self._connect()
             database = self.db.job_manager_pygeoapi
             collection = database.jobs
-
             doc_id = collection.insert_one(job_metadata)
-
-            self.db.close()
             LOGGER.info("JOBMANAGER - MongoDB job added")
-            self.destroy()
+            #self.destroy()
             return doc_id
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - add_job error",
                  exc_info=(traceback))
             return False
@@ -85,10 +82,10 @@ class MongoDBManager(BaseManager):
             entry = collection.find_one( {"identifier" : job_id})
             collection.update_one(entry, {"$set": update_dict})
             LOGGER.info("JOBMANAGER - MongoDB job updated")
-            self.destroy()
+            #self.destroy()
             return True
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - MongoDB update_job error",
                  exc_info=(traceback))
             return False
@@ -100,10 +97,10 @@ class MongoDBManager(BaseManager):
             collection = database.jobs
             collection.delete_one({"identifier": job_id})
             LOGGER.info("JOBMANAGER - MongoDB job deleted")
-            self.destroy()
+            #self.destroy()
             return True
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - MongoDB delete_job error",
                  exc_info=(traceback))
             return False
@@ -115,10 +112,10 @@ class MongoDBManager(BaseManager):
             collection = database.jobs
             entry = collection.find_one( {"identifier" : job_id})
             LOGGER.info("JOBMANAGER - MongoDB job queried")
-            self.destroy()
+            #self.destroy()
             return entry
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - MongoDB get_job error",
                  exc_info=(traceback))
             return False
@@ -134,11 +131,11 @@ class MongoDBManager(BaseManager):
                 return (None,)
             with open(entry["location"], "r") as file:
                 data = json.load(file)
-            self.destroy()
+            #self.destroy()
             LOGGER.info("JOBMANAGER - MongoDB job result queried")
             return entry["mimetype"], data
         except:
-            self.destroy()
+            #self.destroy()
             LOGGER.error("JOBMANAGER - MongoDB get_job_result error",
                  exc_info=(traceback))
             return False
