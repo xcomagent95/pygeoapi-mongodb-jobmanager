@@ -12,8 +12,8 @@ Step 2: Add the following to manager section the .config of the pygeoapi:
 ```
 manager:  # optional OGC API - Processes asynchronous job management
       name: MongoDB # plugin name (see pygeoapi.plugin for supported process_manager's)
-      connection: CONNECTION_URI_OF_MONGODB_INSTANCE # connection info to store jobs (e.g. filepath)
-      output_dir: DIRECTORY_FOR_RESULTS  # temporary file area for storing job results (files)
+      connection: CONNECTION_URI_OF_MONGODB_INSTANCE # connection info to store jobs
+      output_dir: DIRECTORY_FOR_RESULTS  # directory for storing job results
 ```
 
 Step 3: Add the following to the plugin.py ```PLUGINS``` section of the pygeoapi:
