@@ -51,6 +51,8 @@ class pygeoapiPerformanceTest(HttpUser):
         #get items
         collection = random.choice(collections)
         self.client.get("/collections/" + collection[0] + "/items/" + str(random.choice(collection[1])))
+        #get processes
+        self.client.get("/processes")
         #get jobs
         self.client.get("/jobs?f=json")
         #get jobs with status
