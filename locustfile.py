@@ -10,7 +10,7 @@ class pygeoapiPerformanceTest(HttpUser):
 
         status = ["accepted", "running", "successful", "failed", "dismissed"]
 
-        responseJobs = urlopen(host + 'jobs?f=json')
+        responseJobs = urlopen(host + '/jobs?f=json')
         stringJobs = responseJobs.read().decode('utf-8')
         jsonJobs = json.loads(stringJobs)
         jobIDs = []
@@ -20,13 +20,20 @@ class pygeoapiPerformanceTest(HttpUser):
             if i['status'] == 'successful':
                 completedJobs.append(i["jobID"])
 
-        responseCollections = urlopen(host + 'collections?f=json')
+        responseProcesses = urlopen(host + '/processes?f=json')
+        stringProcesses = responseProcesses.read().decode('utf-8')
+        jsonProcesses = json.loads(stringProcesses)
+        processIDs = []
+        for i in jsonProcesses["processes"]:
+            processIDs.append(i["id"])
+
+        responseCollections = urlopen(host + '/collections?f=json')
         string = responseCollections.read().decode('utf-8')
         jsonCollections = json.loads(string)
         collections = []
         for i in jsonCollections["collections"]:
             name = i["id"]
-            responseItems = urlopen(host + 'collections/' + name +'/items?f=json')
+            responseItems = urlopen(host + '/collections/' + name +'/items?f=json')
             stringItems = responseItems.read().decode('utf-8')
             jsonItems = json.loads(stringItems)
             items = []
@@ -53,6 +60,8 @@ class pygeoapiPerformanceTest(HttpUser):
         self.client.get("/collections/" + collection[0] + "/items/" + str(random.choice(collection[1])))
         #get processes
         self.client.get("/processes")
+        #get process
+        self.client.get("/processes/" + random.choice(processIDs))
         #get jobs
         self.client.get("/jobs?f=json")
         #get jobs with status
