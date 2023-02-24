@@ -24,5 +24,7 @@ Step 3: Add the following to the plugin.py ```PLUGINS``` section of the pygeoapi
     }
  ```
  
+ The pygeoapi should now employ the MongoDB jobmanager. Jobs are stored in the job_manager_pygeoapi database in the jobs collection. 
+ 
  ## Testing
  This repository also contains a locust test file which can be used to load test an instance of the pygeoapi via [Locust](https://docs.locust.io/en/stable/).
