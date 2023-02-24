@@ -23,3 +23,6 @@ Step 3: Add the following to the plugin.py ```PLUGINS``` section of the pygeoapi
         'MongoDB': 'pygeoapi.process.manager.mongodb_.MongoDBManager'
     }
  ```
+ 
+ ## Testing
+ This repository also contains a locust test file which can be used to load test an instance of the pygeoapi via [Locust](https://docs.locust.io/en/stable/).
